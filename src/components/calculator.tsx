@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Wallet } from 'lucide-react';
+import { Wallet, Backspace } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const formatNumber = (numStr: string) => {
@@ -191,26 +191,27 @@ export default function Calculator() {
     { label: 'C', handler: handleClearClick, type: 'clear' },
     { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
     { label: '%', handler: handlePercentClick, type: 'operator' },
-    { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
-    
+    { label: <Backspace />, handler: handleBackspaceClick, type: 'operator' },
+
     { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
     { label: '8', handler: () => handleNumberClick('8'), type: 'number' },
     { label: '9', handler: () => handleNumberClick('9'), type: 'number' },
-    { label: '×', handler: () => handleOperatorClick('×'), type: 'operator' },
+    { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
 
     { label: '4', handler: () => handleNumberClick('4'), type: 'number' },
     { label: '5', handler: () => handleNumberClick('5'), type: 'number' },
     { label: '6', handler: () => handleNumberClick('6'), type: 'number' },
-    { label: '-', handler: () => handleOperatorClick('-'), type: 'operator' },
-    
+    { label: '×', handler: () => handleOperatorClick('×'), type: 'operator' },
+
     { label: '1', handler: () => handleNumberClick('1'), type: 'number' },
     { label: '2', handler: () => handleNumberClick('2'), type: 'number' },
     { label: '3', handler: () => handleNumberClick('3'), type: 'number' },
-    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
-    
-    { label: '0', handler: () => handleNumberClick('0'), type: 'number', className: 'col-span-2' },
+    { label: '-', handler: () => handleOperatorClick('-'), type: 'operator' },
+
+    { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
     { label: '.', handler: handleDecimalClick, type: 'number' },
     { label: '=', handler: handleEqualsClick, type: 'equals' },
+    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
   ];
 
   const renderButtonLabel = (label: string | React.ReactElement) => {
@@ -255,13 +256,14 @@ export default function Calculator() {
             >
              +/-
             </Button>
-             <Button
-              onClick={() => handleOperatorClick('÷')}
+            <Button
+              onClick={handlePercentClick}
               variant="outline"
               className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
             >
-              ÷
+             %
             </Button>
+
           {buttons.slice(4, 8).map(({ label, handler, type, className }, index) => (
              <Button
               key={index+4}
@@ -298,19 +300,25 @@ export default function Calculator() {
               {renderButtonLabel(label)}
             </Button>
           ))}
-          {buttons.slice(16).map(({ label, handler, type, className }, index) => (
-             <Button
-              key={index+16}
-              onClick={handler}
-              variant="outline"
-              className={cn('text-xl h-auto aspect-square', {
-                'bg-primary text-primary-foreground hover:bg-primary/90': type === 'equals',
-                'bg-accent text-accent-foreground hover:bg-accent/90': type === 'operator',
-              }, className)}
-            >
-              {renderButtonLabel(label)}
-            </Button>
-          ))}
+          
+          <Button onClick={() => handleNumberClick('0')} variant="outline" className="text-xl h-auto aspect-square col-span-2">0</Button>
+          <Button onClick={handleDecimalClick} variant="outline" className="text-xl h-auto aspect-square">.</Button>
+          <Button onClick={() => handleOperatorClick('+')} variant="outline" className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'>+</Button>
+          
+          <Button
+            onClick={handleBackspaceClick}
+            variant="outline"
+            className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
+          >
+            <Backspace />
+          </Button>
+          <Button
+            onClick={handleEqualsClick}
+            variant="outline"
+            className='text-xl h-auto aspect-square bg-primary text-primary-foreground hover:bg-primary/90 col-span-3'
+          >
+            =
+          </Button>
         </div>
       </CardContent>
     </Card>
