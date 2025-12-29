@@ -8,10 +8,20 @@ import { Delete } from 'lucide-react';
 
 const formatNumber = (numStr: string) => {
   if (numStr === 'Lỗi') return numStr;
-  const [integerPart, decimalPart] = numStr.split('.');
+  const num = parseFloat(numStr);
+  if (isNaN(num)) return '0';
+  
+  const [integerPart, decimalPart] = num.toString().split('.');
+
+  // Avoid reformatting if it's just a negative sign or ends with a decimal.
+  if (numStr === '-' || numStr.endsWith('.')) {
+    return numStr;
+  }
+  
   const formattedIntegerPart = new Intl.NumberFormat('en-US').format(
     parseInt(integerPart, 10)
   );
+
   return decimalPart !== undefined
     ? `${formattedIntegerPart}.${decimalPart}`
     : formattedIntegerPart;
@@ -45,6 +55,20 @@ export default function Calculator() {
       setDisplay(display + '.');
     }
   };
+  
+  const handleToggleSignClick = () => {
+    if (display === '0' || display === 'Lỗi') return;
+    const newValue = (parseFloat(display) * -1).toString();
+    setDisplay(newValue);
+  };
+  
+  const handlePercentClick = () => {
+    if (display === 'Lỗi') return;
+    const currentValue = parseFloat(display);
+    const newValue = (currentValue / 100).toString();
+    setDisplay(newValue.slice(0, 15));
+  };
+
 
   const performCalculation = () => {
     const prev = parseFloat(previousValue!);
@@ -111,14 +135,15 @@ export default function Calculator() {
     if (waitingForOperand) return;
     const newDisplay = display.length > 1 ? display.slice(0, -1) : '0';
     setDisplay(newDisplay);
-    if (newDisplay === '0') {
+    if (newDisplay === '0' || newDisplay === '-') {
       setWaitingForOperand(true);
     }
   };
 
   const buttons = [
-    { label: 'C', handler: handleClearClick, type: 'clear', className: 'col-span-2' },
-    { label: <Delete />, handler: handleBackspaceClick, type: 'operator' },
+    { label: 'C', handler: handleClearClick, type: 'clear' },
+    { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
+    { label: '%', handler: handlePercentClick, type: 'operator' },
     { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
     { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
     { label: '8', handler: () => handleNumberClick('8'), type: 'number' },
@@ -132,7 +157,8 @@ export default function Calculator() {
     { label: '2', handler: () => handleNumberClick('2'), type: 'number' },
     { label: '3', handler: () => handleNumberClick('3'), type: 'number' },
     { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
-    { label: '0', handler: () => handleNumberClick('0'), type: 'number', className: 'col-span-2' },
+    { label: <Delete className="mx-auto" />, handler: handleBackspaceClick, type: 'operator' },
+    { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
     { label: '.', handler: handleDecimalClick, type: 'number' },
     { label: '=', handler: handleEqualsClick, type: 'equals' },
   ];
