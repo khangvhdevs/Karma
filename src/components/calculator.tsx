@@ -6,6 +6,17 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Delete } from 'lucide-react';
 
+const formatNumber = (numStr: string) => {
+  if (numStr === 'Lỗi') return numStr;
+  const [integerPart, decimalPart] = numStr.split('.');
+  const formattedIntegerPart = new Intl.NumberFormat('en-US').format(
+    parseInt(integerPart, 10)
+  );
+  return decimalPart !== undefined
+    ? `${formattedIntegerPart}.${decimalPart}`
+    : formattedIntegerPart;
+};
+
 export default function Calculator() {
   const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState<string | null>(null);
@@ -14,7 +25,7 @@ export default function Calculator() {
   const [history, setHistory] = useState('');
 
   const handleNumberClick = (num: string) => {
-    if (display.length >= 12 && !waitingForOperand) return;
+    if (display.length >= 15 && !waitingForOperand) return;
 
     if (waitingForOperand) {
       setDisplay(num);
@@ -59,17 +70,17 @@ export default function Calculator() {
       default:
         return display;
     }
-    return result.toString().slice(0, 12);
+    return result.toString().slice(0, 15);
   };
   
   const handleOperatorClick = (nextOperator: string) => {
     if (previousValue !== null && operator && !waitingForOperand) {
       const result = performCalculation();
-      setHistory(`${result} ${nextOperator}`);
+      setHistory(`${formatNumber(result)} ${nextOperator}`);
       setDisplay(result);
       setPreviousValue(result);
     } else {
-      setHistory(`${display} ${nextOperator}`);
+      setHistory(`${formatNumber(display)} ${nextOperator}`);
       setPreviousValue(display);
     }
     setWaitingForOperand(true);
@@ -81,7 +92,7 @@ export default function Calculator() {
       return;
     }
     const result = performCalculation();
-    setHistory(`${previousValue} ${operator} ${display} =`);
+    setHistory(`${formatNumber(previousValue)} ${operator} ${formatNumber(display)} =`);
     setDisplay(result);
     setPreviousValue(null);
     setOperator(null);
@@ -141,7 +152,7 @@ export default function Calculator() {
             {history || ' '}
           </p>
           <p className="text-3xl font-mono text-foreground break-all" style={{ minHeight: '44px' }}>
-            {display}
+            {formatNumber(display)}
           </p>
         </div>
       </CardHeader>
