@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Quản lý Cờ Tỷ Phú',
-  description: 'Ứng dụng trợ giúp cho trò chơi Cờ Tỷ Phú để quản lý dòng tiền của bạn.',
+  title: 'Cờ sự nghiệp',
+  description: 'Ứng dụng trợ giúp cho trò chơi Cờ sự nghiệp để quản lý dòng tiền của bạn.',
 };
 
 export default function RootLayout({
