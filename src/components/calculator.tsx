@@ -11,6 +11,7 @@ export default function Calculator() {
   const [previousValue, setPreviousValue] = useState<string | null>(null);
   const [operator, setOperator] = useState<string | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(true);
+  const [history, setHistory] = useState('');
 
   const handleNumberClick = (num: string) => {
     if (display.length >= 12 && !waitingForOperand) return;
@@ -64,9 +65,11 @@ export default function Calculator() {
   const handleOperatorClick = (nextOperator: string) => {
     if (previousValue !== null && operator && !waitingForOperand) {
       const result = performCalculation();
+      setHistory(`${result} ${nextOperator}`);
       setDisplay(result);
       setPreviousValue(result);
     } else {
+      setHistory(`${display} ${nextOperator}`);
       setPreviousValue(display);
     }
     setWaitingForOperand(true);
@@ -78,6 +81,7 @@ export default function Calculator() {
       return;
     }
     const result = performCalculation();
+    setHistory(`${previousValue} ${operator} ${display} =`);
     setDisplay(result);
     setPreviousValue(null);
     setOperator(null);
@@ -89,6 +93,7 @@ export default function Calculator() {
     setPreviousValue(null);
     setOperator(null);
     setWaitingForOperand(true);
+    setHistory('');
   };
 
   const handleBackspaceClick = () => {
@@ -132,6 +137,9 @@ export default function Calculator() {
     <Card className="w-full max-w-sm shadow-2xl border-2">
       <CardHeader>
         <div className="bg-muted text-right p-4 rounded-lg border">
+          <p className="text-sm font-mono text-muted-foreground break-all" style={{ minHeight: '20px' }}>
+            {history || ' '}
+          </p>
           <p className="text-3xl font-mono text-foreground break-all" style={{ minHeight: '44px' }}>
             {display}
           </p>
