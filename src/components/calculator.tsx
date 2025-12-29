@@ -113,6 +113,13 @@ export default function Calculator() {
     setDisplay(newValue.slice(0, 15));
   };
 
+  const handleTaxClick = () => {
+    if (display === 'Error') return;
+    const currentValue = parseFloat(display.replace(/,/g, ''));
+    const newValue = (currentValue * 1.1).toString();
+    setDisplay(newValue.slice(0, 15));
+    setWaitingForOperand(true);
+  };
 
   const performCalculation = () => {
     const prev = parseFloat(previousValue!.replace(/,/g, ''));
@@ -208,6 +215,8 @@ export default function Calculator() {
     { label: '0', handler: () => handleNumberClick('0') },
     { label: '.', handler: handleDecimalClick },
     { label: '=', handler: handleEqualsClick, className: 'bg-primary text-primary-foreground hover:bg-primary/90' },
+    { label: 'Tax', handler: handleTaxClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, className: 'col-span-3 bg-accent text-accent-foreground hover:bg-accent/90' },
   ];
 
   return (
@@ -234,13 +243,6 @@ export default function Calculator() {
               {button.label}
             </Button>
           ))}
-            <Button
-              onClick={handleBackspaceClick}
-              variant="outline"
-              className='col-span-4 text-xl h-auto aspect-auto bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-              <Delete />
-            </Button>
         </div>
       </CardContent>
     </Card>
