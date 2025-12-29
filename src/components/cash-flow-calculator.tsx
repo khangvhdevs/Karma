@@ -5,9 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Landmark, ShoppingCart, Wallet, TrendingUp, TrendingDown, PiggyBank, RotateCcw } from 'lucide-react';
+import { Landmark, ShoppingCart, Wallet, TrendingUp, TrendingDown, PiggyBank } from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 
 const InputField = ({ id, label, value, onChange, icon: Icon }: { id: string; label: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; icon: React.ElementType }) => (
   <div className="space-y-2">
@@ -33,11 +32,29 @@ const initialValues = {
   expenses: '100',
 };
 
+// We are defining these functions here so we can export and use them on the parent page
+// Ideally we would move all the state up to the parent page, but this is a quicker solution
+let setSalary: React.Dispatch<React.SetStateAction<string>> = () => {};
+let setPassiveIncome: React.Dispatch<React.SetStateAction<string>> = () => {};
+let setExpenses: React.Dispatch<React.SetStateAction<string>> = () => {};
+
+export const handleReset = () => {
+  setSalary(initialValues.salary);
+  setPassiveIncome(initialValues.passiveIncome);
+  setExpenses(initialValues.expenses);
+};
+
 export default function CashFlowCalculator() {
-  const [salary, setSalary] = useState(initialValues.salary);
-  const [passiveIncome, setPassiveIncome] = useState(initialValues.passiveIncome);
-  const [expenses, setExpenses] = useState(initialValues.expenses);
+  const [salaryState, setSalaryState] = useState(initialValues.salary);
+  const [passiveIncomeState, setPassiveIncomeState] = useState(initialValues.passiveIncome);
+  const [expensesState, setExpensesState] = useState(initialValues.expenses);
   const [isClient, setIsClient] = useState(false);
+  
+  // Assign the state setters to the outer-scope variables
+  setSalary = setSalaryState;
+  setPassiveIncome = setPassiveIncomeState;
+  setExpenses = setExpensesState;
+
 
   useEffect(() => {
     setIsClient(true);
@@ -46,9 +63,9 @@ export default function CashFlowCalculator() {
       const savedPassiveIncome = localStorage.getItem('cashflow-passiveIncome');
       const savedExpenses = localStorage.getItem('cashflow-expenses');
 
-      if (savedSalary !== null) setSalary(savedSalary);
-      if (savedPassiveIncome !== null) setPassiveIncome(savedPassiveIncome);
-      if (savedExpenses !== null) setExpenses(savedExpenses);
+      if (savedSalary !== null) setSalaryState(savedSalary);
+      if (savedPassiveIncome !== null) setPassiveIncomeState(savedPassiveIncome);
+      if (savedExpenses !== null) setExpensesState(savedExpenses);
     } catch (error) {
       console.error('Failed to read from localStorage', error);
     }
@@ -57,14 +74,14 @@ export default function CashFlowCalculator() {
   useEffect(() => {
     if (isClient) {
       try {
-        localStorage.setItem('cashflow-salary', salary);
-        localStorage.setItem('cashflow-passiveIncome', passiveIncome);
-        localStorage.setItem('cashflow-expenses', expenses);
+        localStorage.setItem('cashflow-salary', salaryState);
+        localStorage.setItem('cashflow-passiveIncome', passiveIncomeState);
+        localStorage.setItem('cashflow-expenses', expensesState);
       } catch (error) {
         console.error('Failed to write to localStorage', error);
       }
     }
-  }, [salary, passiveIncome, expenses, isClient]);
+  }, [salaryState, passiveIncomeState, expensesState, isClient]);
 
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
@@ -92,21 +109,15 @@ export default function CashFlowCalculator() {
       return parseFloat(value.replace(/,/g, '')) || 0;
     };
     
-    const numSalary = parseInputValue(salary);
-    const numPassiveIncome = parseInputValue(passiveIncome);
-    const numExpenses = parseInputValue(expenses);
+    const numSalary = parseInputValue(salaryState);
+    const numPassiveIncome = parseInputValue(passiveIncomeState);
+    const numExpenses = parseInputValue(expensesState);
 
     const totalIncome = numSalary + numPassiveIncome;
     const monthlyCashFlow = totalIncome - numExpenses;
 
     return { totalIncome, monthlyCashFlow };
-  }, [salary, passiveIncome, expenses]);
-  
-  const handleReset = () => {
-    setSalary(initialValues.salary);
-    setPassiveIncome(initialValues.passiveIncome);
-    setExpenses(initialValues.expenses);
-  };
+  }, [salaryState, passiveIncomeState, expensesState]);
 
   return (
     <div className="w-full space-y-6">
@@ -115,9 +126,9 @@ export default function CashFlowCalculator() {
           <CardTitle className="text-2xl font-headline flex items-center gap-2"><Wallet className="h-6 w-6 text-primary" /> Tài chính</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <InputField id="salary" label="Lương (khi qua ô Bắt đầu)" value={salary} onChange={handleInputChange(setSalary)} icon={Landmark} />
-          <InputField id="passive" label="Thu nhập thụ động" value={passiveIncome} onChange={handleInputChange(setPassiveIncome)} icon={PiggyBank} />
-          <InputField id="expenses" label="Chi phí hàng tháng" value={expenses} onChange={handleInputChange(setExpenses)} icon={ShoppingCart} />
+          <InputField id="salary" label="Lương (khi qua ô Bắt đầu)" value={salaryState} onChange={handleInputChange(setSalaryState)} icon={Landmark} />
+          <InputField id="passive" label="Thu nhập thụ động" value={passiveIncomeState} onChange={handleInputChange(setPassiveIncomeState)} icon={PiggyBank} />
+          <InputField id="expenses" label="Chi phí hàng tháng" value={expensesState} onChange={handleInputChange(setExpensesState)} icon={ShoppingCart} />
         </CardContent>
       </Card>
 
@@ -143,11 +154,6 @@ export default function CashFlowCalculator() {
           </div>
         </CardContent>
       </Card>
-      
-      <Button onClick={handleReset} variant="destructive" className="w-full">
-        <RotateCcw className="mr-2 h-5 w-5" />
-        Reset Báo cáo
-      </Button>
     </div>
   );
 }
