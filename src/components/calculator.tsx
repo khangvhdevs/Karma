@@ -43,6 +43,19 @@ export default function Calculator() {
     setIsClient(true);
   }, []);
 
+  const handleVibrate = () => {
+    if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
+      window.navigator.vibrate(50);
+    }
+  };
+
+  const wrapWithVibration = <T extends (...args: any[]) => any>(fn: T): T => {
+    return ((...args: Parameters<T>) => {
+      handleVibrate();
+      return fn(...args);
+    }) as T;
+  };
+
   const getMonthlyCashFlow = () => {
     try {
       const savedSalary = localStorage.getItem('cashflow-salary') || '0';
@@ -60,15 +73,15 @@ export default function Calculator() {
     }
   };
 
-  const handleLoadCashFlow = () => {
+  const handleLoadCashFlow = wrapWithVibration(() => {
     if (isClient) {
       const cashFlow = getMonthlyCashFlow();
       setDisplay(cashFlow.toString());
       setWaitingForOperand(false);
     }
-  };
+  });
 
-  const handleNumberClick = (num: string) => {
+  const handleNumberClick = wrapWithVibration((num: string) => {
     if (display.length >= 15 && !waitingForOperand) return;
 
     if (waitingForOperand) {
@@ -77,9 +90,9 @@ export default function Calculator() {
     } else {
       setDisplay(display === '0' ? num : display + num);
     }
-  };
+  });
 
-  const handleDecimalClick = () => {
+  const handleDecimalClick = wrapWithVibration(() => {
     if (waitingForOperand) {
       setDisplay('0.');
       setWaitingForOperand(false);
@@ -88,15 +101,15 @@ export default function Calculator() {
     if (!display.includes('.')) {
       setDisplay(display + '.');
     }
-  };
+  });
   
-  const handleToggleSignClick = () => {
+  const handleToggleSignClick = wrapWithVibration(() => {
     if (display === '0' || display === 'Error') return;
     const newValue = (parseFloat(display.replace(/,/g, '')) * -1).toString();
     setDisplay(newValue);
-  };
+  });
   
-  const handlePercentClick = () => {
+  const handlePercentClick = wrapWithVibration(() => {
     if (display === 'Error') return;
     const currentValue = parseFloat(display.replace(/,/g, ''));
     let newValue;
@@ -111,9 +124,9 @@ export default function Calculator() {
     }
     
     setDisplay(newValue.slice(0, 15));
-  };
+  });
 
-  const handleIRClick = () => {
+  const handleIRClick = wrapWithVibration(() => {
     if (display === 'Error') return;
     
     let newValue: string;
@@ -129,7 +142,7 @@ export default function Calculator() {
 
     setDisplay(newValue.slice(0, 15));
     setWaitingForOperand(false);
-  };
+  });
 
   const performCalculation = () => {
     const prev = parseFloat(previousValue!.replace(/,/g, ''));
@@ -158,7 +171,7 @@ export default function Calculator() {
     return result.toString().slice(0, 15);
   };
   
-  const handleOperatorClick = (nextOperator: string) => {
+  const handleOperatorClick = wrapWithVibration((nextOperator: string) => {
     if (display === 'Error') return;
     const currentDisplayValue = display.replace(/,/g, '');
 
@@ -173,9 +186,9 @@ export default function Calculator() {
     }
     setWaitingForOperand(true);
     setOperator(nextOperator);
-  };
+  });
 
-  const handleEqualsClick = () => {
+  const handleEqualsClick = wrapWithVibration(() => {
     if (previousValue === null || operator === null || waitingForOperand) {
       return;
     }
@@ -185,24 +198,24 @@ export default function Calculator() {
     setPreviousValue(null);
     setOperator(null);
     setWaitingForOperand(true);
-  };
+  });
 
-  const handleClearClick = () => {
+  const handleClearClick = wrapWithVibration(() => {
     setDisplay('0');
     setPreviousValue(null);
     setOperator(null);
     setWaitingForOperand(true);
     setHistory('');
-  };
+  });
 
-  const handleBackspaceClick = () => {
+  const handleBackspaceClick = wrapWithVibration(() => {
     if (waitingForOperand || display === 'Error') return;
     const newDisplay = display.length > 1 ? display.slice(0, -1) : '0';
     setDisplay(newDisplay);
     if (newDisplay === '0' || newDisplay === '-') {
       setWaitingForOperand(true);
     }
-  };
+  });
   
   const buttons = [
     { label: 'C', handler: handleClearClick, className: 'bg-destructive/80 text-destructive-foreground hover:bg-destructive/90' },
@@ -241,11 +254,11 @@ export default function Calculator() {
     <Card className="w-full max-w-sm shadow-2xl border-2">
       <CardHeader>
         <div className="bg-muted text-right p-4 rounded-lg border">
-          <p className="text-3xl font-mono text-foreground break-all" style={{ minHeight: '44px' }}>
-            {formatNumber(display)}
-          </p>
           <p className="text-sm font-mono text-muted-foreground break-all" style={{ minHeight: '20px' }}>
             {history || ' '}
+          </p>
+          <p className="text-3xl font-mono text-foreground break-all" style={{ minHeight: '44px' }}>
+            {formatNumber(display)}
           </p>
         </div>
       </CardHeader>
