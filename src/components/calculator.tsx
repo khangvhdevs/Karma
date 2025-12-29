@@ -244,10 +244,10 @@ export default function Calculator() {
   ];
   
   const topButtons = [
-    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
-    { label: 'IR', handler: handleIRClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
-    { label: <PawPrintIcon className="mx-auto h-5 w-5"/>, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
-    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, className: 'bg-secondary text-secondary-foreground hover:bg-secondary/80' },
+    { label: 'IR', handler: handleIRClick, className: 'bg-secondary text-secondary-foreground hover:bg-secondary/80' },
+    { label: <PawPrintIcon className="mx-auto h-5 w-5"/>, className: 'bg-secondary text-secondary-foreground hover:bg-secondary/80' },
+    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, className: 'bg-secondary text-secondary-foreground hover:bg-secondary/80' },
   ];
 
   return (
