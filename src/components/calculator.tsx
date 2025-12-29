@@ -189,7 +189,7 @@ export default function Calculator() {
 
   const buttons = [
     { label: 'C', handler: handleClearClick, type: 'clear' },
-    { label: <Delete className="mx-auto" />, handler: handleBackspaceClick, type: 'operator' },
+    { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
     { label: '%', handler: handlePercentClick, type: 'operator' },
     { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
     { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
@@ -206,8 +206,9 @@ export default function Calculator() {
     { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
     { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, type: 'operator' },
     { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
+    { label: '00', handler: () => handleNumberClick('00'), type: 'number' },
     { label: '.', handler: handleDecimalClick, type: 'number' },
-    { label: '=', handler: handleEqualsClick, type: 'equals' },
+    { label: '=', handler: handleEqualsClick, type: 'equals', className: 'col-span-2' },
   ];
 
   const renderButtonLabel = (label: string | React.ReactElement) => {
@@ -231,7 +232,7 @@ export default function Calculator() {
       </CardHeader>
       <CardContent className="space-y-2 pt-6">
         <div className="grid grid-cols-4 gap-2">
-          {buttons.map(({ label, handler, type }, index) => (
+          {buttons.map(({ label, handler, type, className }, index) => (
             <Button
               key={index}
               onClick={handler}
@@ -240,7 +241,7 @@ export default function Calculator() {
                 'bg-accent text-accent-foreground hover:bg-accent/90': type === 'operator',
                 'bg-primary text-primary-foreground hover:bg-primary/90': type === 'equals',
                 'bg-destructive/80 text-destructive-foreground hover:bg-destructive/90': type === 'clear',
-              })}
+              }, className)}
             >
               {renderButtonLabel(label)}
             </Button>
@@ -250,3 +251,4 @@ export default function Calculator() {
     </Card>
   );
 }
+ 
