@@ -208,13 +208,13 @@ export default function Calculator() {
     { label: '3', handler: () => handleNumberClick('3'), type: 'number' },
     { label: '-', handler: () => handleOperatorClick('-'), type: 'operator' },
     
-    { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
-    { label: '00', handler: () => handleNumberClick('00'), type: 'number' },
+    { label: '0', handler: () => handleNumberClick('0'), type: 'number', className: 'col-span-2' },
     { label: '.', handler: handleDecimalClick, type: 'number' },
-    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
-
-    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, type: 'operator', className: 'col-span-2' },
-    { label: '=', handler: handleEqualsClick, type: 'equals', className: 'col-span-2' },
+    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator', className: 'row-span-2' },
+    
+    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, type: 'operator' },
+    { label: '00', handler: () => handleNumberClick('00'), type: 'number' },
+    { label: '=', handler: handleEqualsClick, type: 'equals' },
   ];
 
   const renderButtonLabel = (label: string | React.ReactElement) => {
@@ -236,14 +236,14 @@ export default function Calculator() {
           </p>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2 pt-6">
-        <div className="grid grid-cols-4 gap-2">
+      <CardContent className="pt-6">
+        <div className="grid grid-cols-4 grid-rows-6 gap-2">
           {buttons.map(({ label, handler, type, className }, index) => (
             <Button
               key={index}
               onClick={handler}
               variant="outline"
-              className={cn('text-xl h-16', {
+              className={cn('text-xl h-auto aspect-square', {
                 'bg-accent text-accent-foreground hover:bg-accent/90': type === 'operator',
                 'bg-primary text-primary-foreground hover:bg-primary/90': type === 'equals',
                 'bg-destructive/80 text-destructive-foreground hover:bg-destructive/90': type === 'clear',
