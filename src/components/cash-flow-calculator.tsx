@@ -9,6 +9,24 @@ import { Landmark, ShoppingCart, Wallet, TrendingUp, TrendingDown, PiggyBank } f
 import { cn, formatCurrency } from '@/lib/utils';
 import CashFlowForecast from '@/components/cash-flow-forecast';
 
+const InputField = ({ id, label, value, onChange, icon: Icon }: { id: string; label: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; icon: React.ElementType }) => (
+  <div className="space-y-2">
+    <Label htmlFor={id} className="text-base">{label}</Label>
+    <div className="relative">
+      <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+      <Input
+        id={id}
+        type="tel"
+        inputMode="decimal"
+        placeholder="0"
+        value={value}
+        onChange={onChange}
+        className="pl-10 text-lg h-12"
+      />
+    </div>
+  </div>
+);
+
 export default function CashFlowCalculator() {
   const [salary, setSalary] = useState('200');
   const [passiveIncome, setPassiveIncome] = useState('0');
@@ -24,24 +42,6 @@ export default function CashFlowCalculator() {
 
     return { totalIncome, monthlyCashFlow };
   }, [salary, passiveIncome, expenses]);
-
-  const InputField = ({ id, label, value, onChange, icon: Icon }: { id: string; label: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; icon: React.ElementType }) => (
-    <div className="space-y-2">
-      <Label htmlFor={id} className="text-base">{label}</Label>
-      <div className="relative">
-        <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-        <Input
-          id={id}
-          type="tel"
-          inputMode="decimal"
-          placeholder="0"
-          value={value}
-          onChange={onChange}
-          className="pl-10 text-lg h-12"
-        />
-      </div>
-    </div>
-  );
 
   return (
     <div className="w-full space-y-6">
