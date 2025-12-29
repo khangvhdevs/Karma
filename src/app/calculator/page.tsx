@@ -10,12 +10,14 @@ export default function CalculatorPage() {
       <Header />
       <main className="flex flex-1 flex-col items-center p-4 md:p-6">
         <div className="w-full max-w-sm space-y-4">
-          <Button asChild variant="outline" className="self-start">
-            <Link href="/">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Link>
-          </Button>
+          <div className="flex justify-between items-center w-full">
+            <Button asChild variant="outline">
+              <Link href="/">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
+              </Link>
+            </Button>
+          </div>
           <Calculator />
         </div>
       </main>

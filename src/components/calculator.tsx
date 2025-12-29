@@ -65,10 +65,6 @@ export default function Calculator() {
       const cashFlow = getMonthlyCashFlow();
       setDisplay(cashFlow.toString());
       setWaitingForOperand(false);
-      toast({
-        title: 'Monthly Cash Flow Loaded',
-        description: `Value: ${formatNumber(cashFlow.toString())}`,
-      });
     }
   };
 
@@ -208,7 +204,7 @@ export default function Calculator() {
     { label: '2', handler: () => handleNumberClick('2'), type: 'number' },
     { label: '3', handler: () => handleNumberClick('3'), type: 'number' },
     { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
-    { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
+    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, type: 'operator' },
     { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
     { label: '.', handler: handleDecimalClick, type: 'number' },
     { label: '=', handler: handleEqualsClick, type: 'equals' },
@@ -233,11 +229,7 @@ export default function Calculator() {
           </p>
         </div>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <Button onClick={handleLoadCashFlow} variant="outline" className="w-full">
-            <Wallet className="mr-2 h-4 w-4" />
-            Load Monthly Cash Flow
-        </Button>
+      <CardContent className="space-y-2 pt-6">
         <div className="grid grid-cols-4 gap-2">
           {buttons.map(({ label, handler, type }, index) => (
             <Button
@@ -258,5 +250,3 @@ export default function Calculator() {
     </Card>
   );
 }
-
-    
