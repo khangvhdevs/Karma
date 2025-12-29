@@ -1,14 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Delete } from 'lucide-react';
+import { Delete, Wallet } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const formatNumber = (numStr: string) => {
   if (numStr === 'Error') return numStr;
-  // Handle cases like "1,234." which parseFloat would parse to 1234
   if (numStr.endsWith('.')) {
     const numPart = numStr.slice(0, -1);
     const parsedNum = parseFloat(numPart.replace(/,/g, ''));
@@ -22,7 +22,7 @@ const formatNumber = (numStr: string) => {
   const [integerPart, decimalPart] = numStr.split('.');
 
   const formattedIntegerPart = new Intl.NumberFormat('en-US').format(
-    parseInt(integerPart.replace(/,/g, ''), 10)
+    parseInt(integerPart.replace(/,/g, ''), 10) || 0
   );
 
   return decimalPart !== undefined
@@ -36,6 +36,41 @@ export default function Calculator() {
   const [operator, setOperator] = useState<string | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(true);
   const [history, setHistory] = useState('');
+  const [isClient, setIsClient] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const getMonthlyCashFlow = () => {
+    try {
+      const savedSalary = localStorage.getItem('cashflow-salary') || '0';
+      const savedPassiveIncome = localStorage.getItem('cashflow-passiveIncome') || '0';
+      const savedExpenses = localStorage.getItem('cashflow-expenses') || '0';
+
+      const numSalary = parseFloat(savedSalary.replace(/,/g, '')) || 0;
+      const numPassiveIncome = parseFloat(savedPassiveIncome.replace(/,/g, '')) || 0;
+      const numExpenses = parseFloat(savedExpenses.replace(/,/g, '')) || 0;
+
+      return numSalary + numPassiveIncome - numExpenses;
+    } catch (error) {
+      console.error('Failed to read cash flow data from localStorage', error);
+      return 0;
+    }
+  };
+
+  const handleLoadCashFlow = () => {
+    if (isClient) {
+      const cashFlow = getMonthlyCashFlow();
+      setDisplay(cashFlow.toString());
+      setWaitingForOperand(false);
+      toast({
+        title: 'Monthly Cash Flow Loaded',
+        description: `Value: ${formatNumber(cashFlow.toString())}`,
+      });
+    }
+  };
 
   const handleNumberClick = (num: string) => {
     if (display.length >= 15 && !waitingForOperand) return;
@@ -198,7 +233,11 @@ export default function Calculator() {
           </p>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-2">
+        <Button onClick={handleLoadCashFlow} variant="outline" className="w-full">
+            <Wallet className="mr-2 h-4 w-4" />
+            Load Monthly Cash Flow
+        </Button>
         <div className="grid grid-cols-4 gap-2">
           {buttons.map(({ label, handler, type }, index) => (
             <Button
@@ -219,3 +258,5 @@ export default function Calculator() {
     </Card>
   );
 }
+
+    
