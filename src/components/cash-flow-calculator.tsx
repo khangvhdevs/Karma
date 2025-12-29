@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Landmark, ShoppingCart, Wallet, TrendingUp, TrendingDown, PiggyBank } from 'lucide-react';
+import { Landmark, ShoppingCart, Wallet, TrendingUp, TrendingDown, PiggyBank, RotateCcw } from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 const InputField = ({ id, label, value, onChange, icon: Icon }: { id: string; label: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; icon: React.ElementType }) => (
   <div className="space-y-2">
@@ -26,11 +27,44 @@ const InputField = ({ id, label, value, onChange, icon: Icon }: { id: string; la
   </div>
 );
 
+const initialValues = {
+  salary: '200',
+  passiveIncome: '0',
+  expenses: '100',
+};
 
 export default function CashFlowCalculator() {
-  const [salary, setSalary] = useState('200');
-  const [passiveIncome, setPassiveIncome] = useState('0');
-  const [expenses, setExpenses] = useState('100');
+  const [salary, setSalary] = useState(initialValues.salary);
+  const [passiveIncome, setPassiveIncome] = useState(initialValues.passiveIncome);
+  const [expenses, setExpenses] = useState(initialValues.expenses);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    try {
+      const savedSalary = localStorage.getItem('cashflow-salary');
+      const savedPassiveIncome = localStorage.getItem('cashflow-passiveIncome');
+      const savedExpenses = localStorage.getItem('cashflow-expenses');
+
+      if (savedSalary !== null) setSalary(savedSalary);
+      if (savedPassiveIncome !== null) setPassiveIncome(savedPassiveIncome);
+      if (savedExpenses !== null) setExpenses(savedExpenses);
+    } catch (error) {
+      console.error('Failed to read from localStorage', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isClient) {
+      try {
+        localStorage.setItem('cashflow-salary', salary);
+        localStorage.setItem('cashflow-passiveIncome', passiveIncome);
+        localStorage.setItem('cashflow-expenses', expenses);
+      } catch (error) {
+        console.error('Failed to write to localStorage', error);
+      }
+    }
+  }, [salary, passiveIncome, expenses, isClient]);
 
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
@@ -50,7 +84,7 @@ export default function CashFlowCalculator() {
       finalValue += `.${parts[1]}`;
     }
     
-    setter(finalValue);
+    setter(finalValue || '0');
   };
 
   const { totalIncome, monthlyCashFlow } = useMemo(() => {
@@ -67,6 +101,12 @@ export default function CashFlowCalculator() {
 
     return { totalIncome, monthlyCashFlow };
   }, [salary, passiveIncome, expenses]);
+  
+  const handleReset = () => {
+    setSalary(initialValues.salary);
+    setPassiveIncome(initialValues.passiveIncome);
+    setExpenses(initialValues.expenses);
+  };
 
   return (
     <div className="w-full space-y-6">
@@ -104,6 +144,10 @@ export default function CashFlowCalculator() {
         </CardContent>
       </Card>
       
+      <Button onClick={handleReset} variant="destructive" className="w-full">
+        <RotateCcw className="mr-2 h-5 w-5" />
+        Reset Báo cáo
+      </Button>
     </div>
   );
 }
