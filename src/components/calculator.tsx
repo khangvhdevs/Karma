@@ -101,7 +101,7 @@ export default function Calculator() {
   };
 
   const buttons = [
-    { label: 'C', handler: handleClearClick, type: 'clear' },
+    { label: 'C', handler: handleClearClick, type: 'clear', className: 'col-span-2' },
     { label: <Delete />, handler: handleBackspaceClick, type: 'operator' },
     { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
     { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
@@ -146,7 +146,7 @@ export default function Calculator() {
               variant="outline"
               className={cn('text-xl h-16', className, {
                 'bg-accent text-accent-foreground hover:bg-accent/90': type === 'operator',
-                'bg-primary text-primary-foreground hover:bg-primary/90 col-span-4': type === 'equals',
+                'bg-primary text-primary-foreground hover:bg-primary/90': type === 'equals',
                 'bg-destructive/80 text-destructive-foreground hover:bg-destructive/90': type === 'clear',
               })}
             >
