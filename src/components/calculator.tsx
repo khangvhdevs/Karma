@@ -8,38 +8,37 @@ import { Delete } from 'lucide-react';
 
 export default function Calculator() {
   const [display, setDisplay] = useState('0');
-  const [currentValue, setCurrentValue] = useState<string | null>(null);
   const [previousValue, setPreviousValue] = useState<string | null>(null);
   const [operator, setOperator] = useState<string | null>(null);
+  const [waitingForOperand, setWaitingForOperand] = useState(true);
 
   const handleNumberClick = (num: string) => {
-    if (display.length >= 12) return;
-    if (operator && currentValue === display) {
+    if (display.length >= 12 && !waitingForOperand) return;
+
+    if (waitingForOperand) {
       setDisplay(num);
-      setCurrentValue(num);
+      setWaitingForOperand(false);
     } else {
-      const newDisplay = display === '0' ? num : display + num;
-      setDisplay(newDisplay);
-      setCurrentValue(newDisplay);
+      setDisplay(display === '0' ? num : display + num);
     }
   };
 
-  const handleOperatorClick = (op: string) => {
-    if (previousValue && operator && currentValue) {
-      handleEqualsClick();
-      setPreviousValue(display);
-    } else {
-      setPreviousValue(display);
+  const handleDecimalClick = () => {
+    if (waitingForOperand) {
+      setDisplay('0.');
+      setWaitingForOperand(false);
+      return;
     }
-    setCurrentValue(display);
-    setOperator(op);
+    if (!display.includes('.')) {
+      setDisplay(display + '.');
+    }
   };
 
-  const handleEqualsClick = () => {
-    if (!operator || previousValue === null || currentValue === null) return;
-    const prev = parseFloat(previousValue);
-    const curr = parseFloat(currentValue);
+  const performCalculation = () => {
+    const prev = parseFloat(previousValue!);
+    const curr = parseFloat(display);
     let result: number;
+
     switch (operator) {
       case '+':
         result = prev + curr;
@@ -51,35 +50,53 @@ export default function Calculator() {
         result = prev * curr;
         break;
       case '÷':
+        if (curr === 0) {
+          return 'Lỗi';
+        }
         result = prev / curr;
         break;
       default:
-        return;
+        return display;
     }
+    return result.toString().slice(0, 12);
+  };
+  
+  const handleOperatorClick = (nextOperator: string) => {
+    if (previousValue !== null && operator && !waitingForOperand) {
+      const result = performCalculation();
+      setDisplay(result);
+      setPreviousValue(result);
+    } else {
+      setPreviousValue(display);
+    }
+    setWaitingForOperand(true);
+    setOperator(nextOperator);
+  };
 
-    const resultString = result.toString().slice(0, 12);
-    setDisplay(resultString);
-    setPreviousValue(resultString);
-    setCurrentValue(null);
+  const handleEqualsClick = () => {
+    if (previousValue === null || operator === null || waitingForOperand) {
+      return;
+    }
+    const result = performCalculation();
+    setDisplay(result);
+    setPreviousValue(null);
     setOperator(null);
+    setWaitingForOperand(true);
   };
 
   const handleClearClick = () => {
     setDisplay('0');
-    setCurrentValue(null);
     setPreviousValue(null);
     setOperator(null);
+    setWaitingForOperand(true);
   };
 
   const handleBackspaceClick = () => {
+    if (waitingForOperand) return;
     const newDisplay = display.length > 1 ? display.slice(0, -1) : '0';
     setDisplay(newDisplay);
-    setCurrentValue(newDisplay);
-  };
-  
-  const handleDecimalClick = () => {
-    if (!display.includes('.')) {
-      setDisplay(display + '.');
+    if (newDisplay === '0') {
+      setWaitingForOperand(true);
     }
   };
 
