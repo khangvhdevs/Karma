@@ -208,7 +208,8 @@ export default function Calculator() {
     { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
     { label: '00', handler: () => handleNumberClick('00'), type: 'number' },
     { label: '.', handler: handleDecimalClick, type: 'number' },
-    { label: '=', handler: handleEqualsClick, type: 'equals', className: 'col-span-2' },
+    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, type: 'operator' },
+    { label: '=', handler: handleEqualsClick, type: 'equals' },
   ];
 
   const renderButtonLabel = (label: string | React.ReactElement) => {
@@ -251,4 +252,3 @@ export default function Calculator() {
     </Card>
   );
 }
- 
