@@ -115,10 +115,20 @@ export default function Calculator() {
 
   const handleTaxClick = () => {
     if (display === 'Error') return;
-    const currentValue = parseFloat(display.replace(/,/g, ''));
-    const newValue = Math.round(currentValue * 1.1).toString();
+    
+    let newValue: string;
+    if (previousValue && operator && waitingForOperand) {
+      const prev = parseFloat(previousValue);
+      newValue = Math.round(prev * 0.1).toString();
+      setHistory(`${formatNumber(previousValue)} ${operator} ${formatNumber(newValue)}`);
+    } else {
+      const currentValue = parseFloat(display.replace(/,/g, ''));
+      newValue = Math.round(currentValue * 1.1).toString();
+      setHistory('');
+    }
+
     setDisplay(newValue.slice(0, 15));
-    setWaitingForOperand(true);
+    setWaitingForOperand(false);
   };
 
   const performCalculation = () => {
@@ -215,8 +225,8 @@ export default function Calculator() {
     { label: '0', handler: () => handleNumberClick('0') },
     { label: '.', handler: handleDecimalClick },
     { label: '=', handler: handleEqualsClick, className: 'bg-primary text-primary-foreground hover:bg-primary/90' },
-    { label: 'Tax', handler: handleTaxClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
-    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, className: 'col-span-3 bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: 'Tax', handler: handleTaxClick, className: 'col-span-2 bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, className: 'col-span-2 bg-accent text-accent-foreground hover:bg-accent/90' },
   ];
 
   return (
