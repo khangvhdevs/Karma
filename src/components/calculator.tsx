@@ -191,25 +191,30 @@ export default function Calculator() {
     { label: 'C', handler: handleClearClick, type: 'clear' },
     { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
     { label: '%', handler: handlePercentClick, type: 'operator' },
-    { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
+    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, type: 'operator' },
+    
     { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
     { label: '8', handler: () => handleNumberClick('8'), type: 'number' },
     { label: '9', handler: () => handleNumberClick('9'), type: 'number' },
-    { label: '×', handler: () => handleOperatorClick('×'), type: 'operator' },
+    { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
+    
     { label: '4', handler: () => handleNumberClick('4'), type: 'number' },
     { label: '5', handler: () => handleNumberClick('5'), type: 'number' },
     { label: '6', handler: () => handleNumberClick('6'), type: 'number' },
-    { label: '-', handler: () => handleOperatorClick('-'), type: 'operator' },
+    { label: '×', handler: () => handleOperatorClick('×'), type: 'operator' },
+
     { label: '1', handler: () => handleNumberClick('1'), type: 'number' },
     { label: '2', handler: () => handleNumberClick('2'), type: 'number' },
     { label: '3', handler: () => handleNumberClick('3'), type: 'number' },
-    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
-    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, type: 'operator' },
+    { label: '-', handler: () => handleOperatorClick('-'), type: 'operator' },
+    
     { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
     { label: '00', handler: () => handleNumberClick('00'), type: 'number' },
     { label: '.', handler: handleDecimalClick, type: 'number' },
-    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, type: 'operator' },
-    { label: '=', handler: handleEqualsClick, type: 'equals' },
+    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
+
+    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, type: 'operator', className: 'col-span-2' },
+    { label: '=', handler: handleEqualsClick, type: 'equals', className: 'col-span-2' },
   ];
 
   const renderButtonLabel = (label: string | React.ReactElement) => {
