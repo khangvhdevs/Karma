@@ -8,18 +8,21 @@ import { Delete } from 'lucide-react';
 
 const formatNumber = (numStr: string) => {
   if (numStr === 'Lỗi') return numStr;
-  const num = parseFloat(numStr);
+  // Handle cases like "1,234." which parseFloat would parse to 1234
+  if (numStr.endsWith('.')) {
+    const numPart = numStr.slice(0, -1);
+    const parsedNum = parseFloat(numPart.replace(/,/g, ''));
+    if (isNaN(parsedNum)) return '0.';
+    return new Intl.NumberFormat('en-US').format(parsedNum) + '.';
+  }
+
+  const num = parseFloat(numStr.replace(/,/g, ''));
   if (isNaN(num)) return '0';
   
-  const [integerPart, decimalPart] = num.toString().split('.');
+  const [integerPart, decimalPart] = numStr.split('.');
 
-  // Avoid reformatting if it's just a negative sign or ends with a decimal.
-  if (numStr === '-' || numStr.endsWith('.')) {
-    return numStr;
-  }
-  
   const formattedIntegerPart = new Intl.NumberFormat('en-US').format(
-    parseInt(integerPart, 10)
+    parseInt(integerPart.replace(/,/g, ''), 10)
   );
 
   return decimalPart !== undefined
@@ -58,21 +61,31 @@ export default function Calculator() {
   
   const handleToggleSignClick = () => {
     if (display === '0' || display === 'Lỗi') return;
-    const newValue = (parseFloat(display) * -1).toString();
+    const newValue = (parseFloat(display.replace(/,/g, '')) * -1).toString();
     setDisplay(newValue);
   };
   
   const handlePercentClick = () => {
     if (display === 'Lỗi') return;
-    const currentValue = parseFloat(display);
-    const newValue = (currentValue / 100).toString();
+    const currentValue = parseFloat(display.replace(/,/g, ''));
+    let newValue;
+
+    if (previousValue && (operator === '+' || operator === '-')) {
+      // Calculate percentage of the previous value
+      const prev = parseFloat(previousValue.replace(/,/g, ''));
+      newValue = (prev * currentValue / 100).toString();
+    } else {
+      // Default percentage calculation
+      newValue = (currentValue / 100).toString();
+    }
+    
     setDisplay(newValue.slice(0, 15));
   };
 
 
   const performCalculation = () => {
-    const prev = parseFloat(previousValue!);
-    const curr = parseFloat(display);
+    const prev = parseFloat(previousValue!.replace(/,/g, ''));
+    const curr = parseFloat(display.replace(/,/g, ''));
     let result: number;
 
     switch (operator) {
@@ -98,14 +111,17 @@ export default function Calculator() {
   };
   
   const handleOperatorClick = (nextOperator: string) => {
+    if (display === 'Lỗi') return;
+    const currentDisplayValue = display.replace(/,/g, '');
+
     if (previousValue !== null && operator && !waitingForOperand) {
       const result = performCalculation();
-      setHistory(`${formatNumber(result)} ${nextOperator}`);
       setDisplay(result);
       setPreviousValue(result);
+      setHistory(`${formatNumber(result)} ${nextOperator}`);
     } else {
-      setHistory(`${formatNumber(display)} ${nextOperator}`);
-      setPreviousValue(display);
+      setPreviousValue(currentDisplayValue);
+      setHistory(`${formatNumber(currentDisplayValue)} ${nextOperator}`);
     }
     setWaitingForOperand(true);
     setOperator(nextOperator);
@@ -132,7 +148,7 @@ export default function Calculator() {
   };
 
   const handleBackspaceClick = () => {
-    if (waitingForOperand) return;
+    if (waitingForOperand || display === 'Lỗi') return;
     const newDisplay = display.length > 1 ? display.slice(0, -1) : '0';
     setDisplay(newDisplay);
     if (newDisplay === '0' || newDisplay === '-') {
@@ -142,7 +158,7 @@ export default function Calculator() {
 
   const buttons = [
     { label: 'C', handler: handleClearClick, type: 'clear' },
-    { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
+    { label: <Delete className="mx-auto" />, handler: handleBackspaceClick, type: 'operator' },
     { label: '%', handler: handlePercentClick, type: 'operator' },
     { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
     { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
@@ -157,7 +173,7 @@ export default function Calculator() {
     { label: '2', handler: () => handleNumberClick('2'), type: 'number' },
     { label: '3', handler: () => handleNumberClick('3'), type: 'number' },
     { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
-    { label: <Delete className="mx-auto" />, handler: handleBackspaceClick, type: 'operator' },
+    { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
     { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
     { label: '.', handler: handleDecimalClick, type: 'number' },
     { label: '=', handler: handleEqualsClick, type: 'equals' },
@@ -184,12 +200,12 @@ export default function Calculator() {
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-4 gap-2">
-          {buttons.map(({ label, handler, type, className }, index) => (
+          {buttons.map(({ label, handler, type }, index) => (
             <Button
               key={index}
               onClick={handler}
               variant="outline"
-              className={cn('text-xl h-16', className, {
+              className={cn('text-xl h-16', {
                 'bg-accent text-accent-foreground hover:bg-accent/90': type === 'operator',
                 'bg-primary text-primary-foreground hover:bg-primary/90': type === 'equals',
                 'bg-destructive/80 text-destructive-foreground hover:bg-destructive/90': type === 'clear',
