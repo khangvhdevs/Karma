@@ -213,7 +213,6 @@ export default function Calculator() {
     { label: '.', handler: handleDecimalClick, type: 'number' },
     { label: '=', handler: handleEqualsClick, type: 'equals' },
 
-    { label: '00', handler: () => handleNumberClick('00'), type: 'number' },
     { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, type: 'operator' },
   ];
 
@@ -252,7 +251,7 @@ export default function Calculator() {
               {renderButtonLabel(label)}
             </Button>
           ))}
-          <div className="col-span-4 grid grid-cols-2 gap-2">
+          <div className="col-span-4 grid grid-cols-1 gap-2">
             {buttons.slice(20).map(({ label, handler, type, className }, index) => (
               <Button
                 key={index + 20}
