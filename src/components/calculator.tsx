@@ -113,7 +113,7 @@ export default function Calculator() {
     setDisplay(newValue.slice(0, 15));
   };
 
-  const handleTaxClick = () => {
+  const handleIRClick = () => {
     if (display === 'Error') return;
     
     let newValue: string;
@@ -225,7 +225,7 @@ export default function Calculator() {
     { label: '0', handler: () => handleNumberClick('0') },
     { label: '.', handler: handleDecimalClick },
     { label: '=', handler: handleEqualsClick, className: 'bg-primary text-primary-foreground hover:bg-primary/90' },
-    { label: 'Tax', handler: handleTaxClick, className: 'col-span-2 bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: 'IR', handler: handleIRClick, className: 'col-span-2 bg-accent text-accent-foreground hover:bg-accent/90' },
     { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, className: 'col-span-2 bg-accent text-accent-foreground hover:bg-accent/90' },
   ];
 
