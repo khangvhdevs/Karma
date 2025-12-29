@@ -3,6 +3,17 @@ import CashFlowCalculator, { handleReset } from '@/components/cash-flow-calculat
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Calculator, RotateCcw } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export default function Home() {
   return (
@@ -18,10 +29,26 @@ export default function Home() {
                 Mở Máy tính
               </Link>
             </Button>
-            <Button onClick={handleReset} variant="destructive" className="w-full">
-              <RotateCcw className="mr-2 h-5 w-5" />
-              Đặt lại
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive" className="w-full">
+                  <RotateCcw className="mr-2 h-5 w-5" />
+                  Đặt lại
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Bạn có chắc chắn muốn đặt lại?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Hành động này sẽ xóa tất cả dữ liệu tài chính hiện tại của bạn và đặt lại về giá trị mặc định. Bạn sẽ không thể hoàn tác hành động này.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Hủy</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleReset}>Tiếp tục</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </main>
