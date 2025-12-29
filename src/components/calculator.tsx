@@ -188,38 +188,27 @@ export default function Calculator() {
   };
 
   const buttons = [
-    { label: 'C', handler: handleClearClick, type: 'clear' },
-    { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
-    { label: '%', handler: handlePercentClick, type: 'operator' },
-    { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
-
-    { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
-    { label: '8', handler: () => handleNumberClick('8'), type: 'number' },
-    { label: '9', handler: () => handleNumberClick('9'), type: 'number' },
-    { label: '×', handler: () => handleOperatorClick('×'), type: 'operator' },
-
-    { label: '4', handler: () => handleNumberClick('4'), type: 'number' },
-    { label: '5', handler: () => handleNumberClick('5'), type: 'number' },
-    { label: '6', handler: () => handleNumberClick('6'), type: 'number' },
-    { label: '-', handler: () => handleOperatorClick('-'), type: 'operator' },
-    
-    { label: '1', handler: () => handleNumberClick('1'), type: 'number' },
-    { label: '2', handler: () => handleNumberClick('2'), type: 'number' },
-    { label: '3', handler: () => handleNumberClick('3'), type: 'number' },
-    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
-
-    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, type: 'action' },
-    { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
-    { label: '.', handler: handleDecimalClick, type: 'number' },
-    { label: '=', handler: handleEqualsClick, type: 'equals' },
+    { label: 'C', handler: handleClearClick, className: 'bg-destructive/80 text-destructive-foreground hover:bg-destructive/90' },
+    { label: '+/-', handler: handleToggleSignClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '%', handler: handlePercentClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '÷', handler: () => handleOperatorClick('÷'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '7', handler: () => handleNumberClick('7') },
+    { label: '8', handler: () => handleNumberClick('8') },
+    { label: '9', handler: () => handleNumberClick('9') },
+    { label: '×', handler: () => handleOperatorClick('×'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '4', handler: () => handleNumberClick('4') },
+    { label: '5', handler: () => handleNumberClick('5') },
+    { label: '6', handler: () => handleNumberClick('6') },
+    { label: '-', handler: () => handleOperatorClick('-'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '1', handler: () => handleNumberClick('1') },
+    { label: '2', handler: () => handleNumberClick('2') },
+    { label: '3', handler: () => handleNumberClick('3') },
+    { label: '+', handler: () => handleOperatorClick('+'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '0', handler: () => handleNumberClick('0') },
+    { label: '.', handler: handleDecimalClick },
+    { label: '=', handler: handleEqualsClick, className: 'bg-primary text-primary-foreground hover:bg-primary/90' },
   ];
-
-  const renderButtonLabel = (label: string | React.ReactElement) => {
-    if (typeof label === 'string') {
-      return label;
-    }
-    return label;
-  }
 
   return (
     <Card className="w-full max-w-sm shadow-2xl border-2">
@@ -235,85 +224,16 @@ export default function Calculator() {
       </CardHeader>
       <CardContent className="pt-6">
         <div className="grid grid-cols-4 gap-2">
+          {buttons.map((button, index) => (
             <Button
-              onClick={handleClearClick}
+              key={index}
+              onClick={button.handler}
               variant="outline"
-              className='text-xl h-auto aspect-square bg-destructive/80 text-destructive-foreground hover:bg-destructive/90'
+              className={cn('text-xl h-auto aspect-square', button.className)}
             >
-             C
+              {button.label}
             </Button>
-            <Button
-              onClick={handleToggleSignClick}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-             +/-
-            </Button>
-            <Button
-              onClick={handlePercentClick}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-             %
-            </Button>
-            <Button
-              onClick={() => handleOperatorClick('÷')}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-              ÷
-            </Button>
-
-            <Button onClick={() => handleNumberClick('7')} variant="outline" className="text-xl h-auto aspect-square">7</Button>
-            <Button onClick={() => handleNumberClick('8')} variant="outline" className="text-xl h-auto aspect-square">8</Button>
-            <Button onClick={() => handleNumberClick('9')} variant="outline" className="text-xl h-auto aspect-square">9</Button>
-            <Button
-              onClick={() => handleOperatorClick('×')}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-              ×
-            </Button>
-
-            <Button onClick={() => handleNumberClick('4')} variant="outline" className="text-xl h-auto aspect-square">4</Button>
-            <Button onClick={() => handleNumberClick('5')} variant="outline" className="text-xl h-auto aspect-square">5</Button>
-            <Button onClick={() => handleNumberClick('6')} variant="outline" className="text-xl h-auto aspect-square">6</Button>
-            <Button
-              onClick={() => handleOperatorClick('-')}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-              -
-            </Button>
-            
-            <Button onClick={() => handleNumberClick('1')} variant="outline" className="text-xl h-auto aspect-square">1</Button>
-            <Button onClick={() => handleNumberClick('2')} variant="outline" className="text-xl h-auto aspect-square">2</Button>
-            <Button onClick={() => handleNumberClick('3')} variant="outline" className="text-xl h-auto aspect-square">3</Button>
-            <Button
-              onClick={() => handleOperatorClick('+')}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-              +
-            </Button>
-
-            <Button
-              onClick={handleLoadCashFlow}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-              <Wallet className="mx-auto h-5 w-5"/>
-            </Button>
-            <Button onClick={() => handleNumberClick('0')} variant="outline" className="text-xl h-auto aspect-square">0</Button>
-            <Button onClick={handleDecimalClick} variant="outline" className="text-xl h-auto aspect-square">.</Button>
-            <Button
-              onClick={handleEqualsClick}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-primary text-primary-foreground hover:bg-primary/90'
-            >
-              =
-            </Button>
-
+          ))}
             <Button
               onClick={handleBackspaceClick}
               variant="outline"
@@ -326,5 +246,3 @@ export default function Calculator() {
     </Card>
   );
 }
-
-    
