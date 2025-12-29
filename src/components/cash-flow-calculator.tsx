@@ -32,7 +32,8 @@ export default function CashFlowCalculator() {
         <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <Input
           id={id}
-          type="number"
+          type="tel"
+          inputMode="decimal"
           placeholder="0"
           value={value}
           onChange={onChange}
