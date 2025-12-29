@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Wallet, Delete } from 'lucide-react';
+import { Wallet, Delete, Cat } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const formatNumber = (numStr: string) => {
@@ -203,30 +203,35 @@ export default function Calculator() {
       setWaitingForOperand(true);
     }
   };
-
+  
   const buttons = [
     { label: 'C', handler: handleClearClick, className: 'bg-destructive/80 text-destructive-foreground hover:bg-destructive/90' },
     { label: '+/-', handler: handleToggleSignClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
     { label: '%', handler: handlePercentClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    
+    { label: 'IR', handler: handleIRClick, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
     { label: '÷', handler: () => handleOperatorClick('÷'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '×', handler: () => handleOperatorClick('×'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+
     { label: '7', handler: () => handleNumberClick('7') },
     { label: '8', handler: () => handleNumberClick('8') },
     { label: '9', handler: () => handleNumberClick('9') },
-    { label: '×', handler: () => handleOperatorClick('×'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '-', handler: () => handleOperatorClick('-'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+
     { label: '4', handler: () => handleNumberClick('4') },
     { label: '5', handler: () => handleNumberClick('5') },
     { label: '6', handler: () => handleNumberClick('6') },
-    { label: '-', handler: () => handleOperatorClick('-'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+    { label: '+', handler: () => handleOperatorClick('+'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
+
     { label: '1', handler: () => handleNumberClick('1') },
     { label: '2', handler: () => handleNumberClick('2') },
     { label: '3', handler: () => handleNumberClick('3') },
-    { label: '+', handler: () => handleOperatorClick('+'), className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
-    { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, className: 'bg-accent text-accent-foreground hover:bg-accent/90' },
-    { label: '0', handler: () => handleNumberClick('0') },
+    { label: '=', handler: handleEqualsClick, className: 'row-span-2 bg-primary text-primary-foreground hover:bg-primary/90' },
+    
+    { label: '0', handler: () => handleNumberClick('0'), className: 'col-span-2' },
     { label: '.', handler: handleDecimalClick },
-    { label: '=', handler: handleEqualsClick, className: 'bg-primary text-primary-foreground hover:bg-primary/90' },
-    { label: 'IR', handler: handleIRClick, className: 'col-span-2 bg-accent text-accent-foreground hover:bg-accent/90' },
-    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, className: 'col-span-2 bg-accent text-accent-foreground hover:bg-accent/90' },
   ];
 
   return (
@@ -248,7 +253,7 @@ export default function Calculator() {
               key={index}
               onClick={button.handler}
               variant="outline"
-              className={cn('text-xl h-auto aspect-square', button.className)}
+              className={cn('text-xl h-16', button.className)}
             >
               {button.label}
             </Button>
