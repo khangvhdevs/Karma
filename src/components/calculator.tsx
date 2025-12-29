@@ -191,30 +191,30 @@ export default function Calculator() {
     { label: 'C', handler: handleClearClick, type: 'clear' },
     { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
     { label: '%', handler: handlePercentClick, type: 'operator' },
-    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, type: 'operator' },
+    { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
     
     { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
     { label: '8', handler: () => handleNumberClick('8'), type: 'number' },
     { label: '9', handler: () => handleNumberClick('9'), type: 'number' },
-    { label: '÷', handler: () => handleOperatorClick('÷'), type: 'operator' },
-    
+    { label: '×', handler: () => handleOperatorClick('×'), type: 'operator' },
+
     { label: '4', handler: () => handleNumberClick('4'), type: 'number' },
     { label: '5', handler: () => handleNumberClick('5'), type: 'number' },
     { label: '6', handler: () => handleNumberClick('6'), type: 'number' },
-    { label: '×', handler: () => handleOperatorClick('×'), type: 'operator' },
+    { label: '-', handler: () => handleOperatorClick('-'), type: 'operator' },
 
     { label: '1', handler: () => handleNumberClick('1'), type: 'number' },
     { label: '2', handler: () => handleNumberClick('2'), type: 'number' },
     { label: '3', handler: () => handleNumberClick('3'), type: 'number' },
-    { label: '-', handler: () => handleOperatorClick('-'), type: 'operator' },
-    
-    { label: '0', handler: () => handleNumberClick('0'), type: 'number', className: 'col-span-2' },
-    { label: '.', handler: handleDecimalClick, type: 'number' },
-    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator', className: 'row-span-2' },
-    
+    { label: '+', handler: () => handleOperatorClick('+'), type: 'operator' },
+
     { label: <Wallet className="mx-auto h-5 w-5"/>, handler: handleLoadCashFlow, type: 'operator' },
-    { label: '00', handler: () => handleNumberClick('00'), type: 'number' },
+    { label: '0', handler: () => handleNumberClick('0'), type: 'number' },
+    { label: '.', handler: handleDecimalClick, type: 'number' },
     { label: '=', handler: handleEqualsClick, type: 'equals' },
+
+    { label: '00', handler: () => handleNumberClick('00'), type: 'number' },
+    { label: <Delete className="mx-auto h-5 w-5"/>, handler: handleBackspaceClick, type: 'operator' },
   ];
 
   const renderButtonLabel = (label: string | React.ReactElement) => {
@@ -237,8 +237,8 @@ export default function Calculator() {
         </div>
       </CardHeader>
       <CardContent className="pt-6">
-        <div className="grid grid-cols-4 grid-rows-6 gap-2">
-          {buttons.map(({ label, handler, type, className }, index) => (
+        <div className="grid grid-cols-4 gap-2">
+          {buttons.slice(0, 20).map(({ label, handler, type, className }, index) => (
             <Button
               key={index}
               onClick={handler}
@@ -252,6 +252,20 @@ export default function Calculator() {
               {renderButtonLabel(label)}
             </Button>
           ))}
+          <div className="col-span-4 grid grid-cols-2 gap-2">
+            {buttons.slice(20).map(({ label, handler, type, className }, index) => (
+              <Button
+                key={index + 20}
+                onClick={handler}
+                variant="outline"
+                className={cn('text-xl h-16', {
+                  'bg-accent text-accent-foreground hover:bg-accent/90': type === 'operator',
+                }, className)}
+              >
+                {renderButtonLabel(label)}
+              </Button>
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
