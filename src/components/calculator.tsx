@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Wallet, Backspace } from 'lucide-react';
+import { Wallet, Delete } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const formatNumber = (numStr: string) => {
@@ -191,7 +191,7 @@ export default function Calculator() {
     { label: 'C', handler: handleClearClick, type: 'clear' },
     { label: '+/-', handler: handleToggleSignClick, type: 'operator' },
     { label: '%', handler: handlePercentClick, type: 'operator' },
-    { label: <Backspace />, handler: handleBackspaceClick, type: 'operator' },
+    { label: <Delete />, handler: handleBackspaceClick, type: 'operator' },
 
     { label: '7', handler: () => handleNumberClick('7'), type: 'number' },
     { label: '8', handler: () => handleNumberClick('8'), type: 'number' },
@@ -236,13 +236,6 @@ export default function Calculator() {
       <CardContent className="pt-6">
         <div className="grid grid-cols-4 gap-2">
            <Button
-              onClick={handleLoadCashFlow}
-              variant="outline"
-              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
-            >
-              <Wallet className="mx-auto h-5 w-5"/>
-            </Button>
-            <Button
               onClick={handleClearClick}
               variant="outline"
               className='text-xl h-auto aspect-square bg-destructive/80 text-destructive-foreground hover:bg-destructive/90'
@@ -262,6 +255,13 @@ export default function Calculator() {
               className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
             >
              %
+            </Button>
+            <Button
+              onClick={handleLoadCashFlow}
+              variant="outline"
+              className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
+            >
+              <Wallet className="mx-auto h-5 w-5"/>
             </Button>
 
           {buttons.slice(4, 8).map(({ label, handler, type, className }, index) => (
@@ -301,21 +301,19 @@ export default function Calculator() {
             </Button>
           ))}
           
-          <Button onClick={() => handleNumberClick('0')} variant="outline" className="text-xl h-auto aspect-square col-span-2">0</Button>
+          <Button onClick={() => handleNumberClick('0')} variant="outline" className="text-xl h-auto aspect-square">0</Button>
           <Button onClick={handleDecimalClick} variant="outline" className="text-xl h-auto aspect-square">.</Button>
-          <Button onClick={() => handleOperatorClick('+')} variant="outline" className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'>+</Button>
-          
           <Button
             onClick={handleBackspaceClick}
             variant="outline"
             className='text-xl h-auto aspect-square bg-accent text-accent-foreground hover:bg-accent/90'
           >
-            <Backspace />
+            <Delete />
           </Button>
           <Button
             onClick={handleEqualsClick}
             variant="outline"
-            className='text-xl h-auto aspect-square bg-primary text-primary-foreground hover:bg-primary/90 col-span-3'
+            className='text-xl h-auto aspect-square bg-primary text-primary-foreground hover:bg-primary/90'
           >
             =
           </Button>
