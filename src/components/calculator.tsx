@@ -116,7 +116,7 @@ export default function Calculator() {
   const handleTaxClick = () => {
     if (display === 'Error') return;
     const currentValue = parseFloat(display.replace(/,/g, ''));
-    const newValue = (currentValue * 1.1).toString();
+    const newValue = Math.round(currentValue * 1.1).toString();
     setDisplay(newValue.slice(0, 15));
     setWaitingForOperand(true);
   };
