@@ -26,26 +26,26 @@ export default function Home() {
             <Button asChild variant="secondary" className="w-full">
               <Link href="/calculator">
                 <Calculator className="mr-2 h-5 w-5" />
-                Mở Máy tính
+                Open Calculator
               </Link>
             </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="destructive" className="w-full">
                   <RotateCcw className="mr-2 h-5 w-5" />
-                  Đặt lại
+                  Reset
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Bạn có chắc chắn muốn đặt lại?</AlertDialogTitle>
+                  <AlertDialogTitle>Are you sure you want to reset?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Hành động này sẽ xóa tất cả dữ liệu tài chính hiện tại của bạn và đặt lại về giá trị mặc định. Bạn sẽ không thể hoàn tác hành động này.
+                    This action will clear all your current financial data and reset to default values. You will not be able to undo this action.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Hủy</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleReset}>Tiếp tục</AlertDialogAction>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleReset}>Continue</AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Delete } from 'lucide-react';
 
 const formatNumber = (numStr: string) => {
-  if (numStr === 'Lỗi') return numStr;
+  if (numStr === 'Error') return numStr;
   // Handle cases like "1,234." which parseFloat would parse to 1234
   if (numStr.endsWith('.')) {
     const numPart = numStr.slice(0, -1);
@@ -60,13 +60,13 @@ export default function Calculator() {
   };
   
   const handleToggleSignClick = () => {
-    if (display === '0' || display === 'Lỗi') return;
+    if (display === '0' || display === 'Error') return;
     const newValue = (parseFloat(display.replace(/,/g, '')) * -1).toString();
     setDisplay(newValue);
   };
   
   const handlePercentClick = () => {
-    if (display === 'Lỗi') return;
+    if (display === 'Error') return;
     const currentValue = parseFloat(display.replace(/,/g, ''));
     let newValue;
 
@@ -100,7 +100,7 @@ export default function Calculator() {
         break;
       case '÷':
         if (curr === 0) {
-          return 'Lỗi';
+          return 'Error';
         }
         result = prev / curr;
         break;
@@ -111,7 +111,7 @@ export default function Calculator() {
   };
   
   const handleOperatorClick = (nextOperator: string) => {
-    if (display === 'Lỗi') return;
+    if (display === 'Error') return;
     const currentDisplayValue = display.replace(/,/g, '');
 
     if (previousValue !== null && operator && !waitingForOperand) {
@@ -148,7 +148,7 @@ export default function Calculator() {
   };
 
   const handleBackspaceClick = () => {
-    if (waitingForOperand || display === 'Lỗi') return;
+    if (waitingForOperand || display === 'Error') return;
     const newDisplay = display.length > 1 ? display.slice(0, -1) : '0';
     setDisplay(newDisplay);
     if (newDisplay === '0' || newDisplay === '-') {

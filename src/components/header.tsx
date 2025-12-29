@@ -6,7 +6,7 @@ export default function Header() {
       <div className="flex items-center gap-3">
         <LoaderPinwheel className="h-8 w-8" />
         <h1 className="text-2xl font-bold tracking-tight font-headline">
-          Karma
+          Cashflow Game
         </h1>
       </div>
     </header>

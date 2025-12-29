@@ -13,7 +13,7 @@ export default function CalculatorPage() {
           <Button asChild variant="outline" className="self-start">
             <Link href="/">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Quay lại
+              Back
             </Link>
           </Button>
           <Calculator />

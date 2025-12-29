@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next'
  
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Cờ sự nghiệp',
-    short_name: 'Cờ sự nghiệp',
-    description: 'Ứng dụng trợ giúp cho trò chơi Cờ sự nghiệp để quản lý dòng tiền của bạn.',
+    name: 'Cashflow Game',
+    short_name: 'Cashflow Game',
+    description: 'A helper app for the Cashflow game to manage your cash flow.',
     start_url: '/',
     display: 'standalone',
     background_color: '#fff',

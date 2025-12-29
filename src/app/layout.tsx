@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
-const APP_NAME = "Cờ sự nghiệp";
-const APP_DESCRIPTION = "Ứng dụng trợ giúp cho trò chơi Cờ sự nghiệp để quản lý dòng tiền của bạn.";
+const APP_NAME = "Cashflow Game";
+const APP_DESCRIPTION = "A helper app for the Cashflow game to manage your cash flow.";
 
 export const metadata: Metadata = {
   title: APP_NAME,
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
