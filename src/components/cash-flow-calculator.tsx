@@ -46,27 +46,27 @@ export default function CashFlowCalculator() {
     <div className="w-full space-y-6">
       <Card className="shadow-lg border-2">
         <CardHeader>
-          <CardTitle className="text-2xl font-headline flex items-center gap-2"><Wallet className="h-6 w-6 text-primary" /> Finances</CardTitle>
+          <CardTitle className="text-2xl font-headline flex items-center gap-2"><Wallet className="h-6 w-6 text-primary" /> Tài chính</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <InputField id="salary" label="Salary (when passing GO)" value={salary} onChange={(e) => setSalary(e.target.value)} icon={Landmark} />
-          <InputField id="passive" label="Passive Income" value={passiveIncome} onChange={(e) => setPassiveIncome(e.target.value)} icon={PiggyBank} />
-          <InputField id="expenses" label="Monthly Expenses" value={expenses} onChange={(e) => setExpenses(e.target.value)} icon={ShoppingCart} />
+          <InputField id="salary" label="Lương (khi qua ô Bắt đầu)" value={salary} onChange={(e) => setSalary(e.target.value)} icon={Landmark} />
+          <InputField id="passive" label="Thu nhập thụ động" value={passiveIncome} onChange={(e) => setPassiveIncome(e.target.value)} icon={PiggyBank} />
+          <InputField id="expenses" label="Chi phí hàng tháng" value={expenses} onChange={(e) => setExpenses(e.target.value)} icon={ShoppingCart} />
         </CardContent>
       </Card>
 
       <Card className="shadow-lg border-2 overflow-hidden">
         <CardHeader>
-          <CardTitle className="text-2xl font-headline">Cash Flow Summary</CardTitle>
+          <CardTitle className="text-2xl font-headline">Tóm tắt dòng tiền</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4 text-lg">
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">Total Income</span>
+            <span className="text-muted-foreground">Tổng thu nhập</span>
             <span className="font-bold">{formatCurrency(totalIncome)}</span>
           </div>
           <Separator />
           <div key={monthlyCashFlow} className="flex justify-between items-center animate-in fade-in-50 duration-500">
-            <span className="text-muted-foreground">Monthly Cash Flow</span>
+            <span className="text-muted-foreground">Dòng tiền hàng tháng</span>
             <span className={cn(
               "font-bold text-xl flex items-center gap-2",
               monthlyCashFlow >= 0 ? "text-success" : "text-destructive"
@@ -78,7 +78,7 @@ export default function CashFlowCalculator() {
         </CardContent>
       </Card>
       
-      <CashFlowForecast totalIncome={totalIncome} expenses={expenses} />
+      <CashFlowForecast totalIncome={totalIncome} expenses={Number(expenses)} />
     </div>
   );
 }

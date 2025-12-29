@@ -43,16 +43,16 @@ const prompt = ai.definePrompt({
   name: 'cashFlowForecastPrompt',
   input: {schema: CashFlowForecastInputSchema},
   output: {schema: CashFlowForecastOutputSchema},
-  prompt: `You are a financial analyst tasked with forecasting cash flow trends.
+  prompt: `Bạn là một nhà phân tích tài chính có nhiệm vụ dự báo xu hướng dòng tiền.
 
-Analyze the following historical income and expense data to forecast future cash flow trends for the specified time horizon.
+Phân tích dữ liệu thu nhập và chi phí lịch sử sau đây để dự báo xu hướng dòng tiền trong tương lai cho khoảng thời gian được chỉ định.
 
-Historical Data:
+Dữ liệu lịch sử:
 {{historicalData}}
 
-Forecast Horizon: {{forecastHorizon}}
+Khoảng thời gian dự báo: {{forecastHorizon}}
 
-Provide a summary of the forecasted cash flow trends and the projected cash flow for the specified time horizon.
+Cung cấp tóm tắt về xu hướng dòng tiền dự báo và dòng tiền dự kiến cho khoảng thời gian được chỉ định bằng tiếng Việt.
 `,
 });
 

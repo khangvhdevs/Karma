@@ -57,8 +57,8 @@ export default function CashFlowForecast({ totalIncome, expenses }: CashFlowFore
       console.error('AI Forecast Error:', error);
       toast({
         variant: 'destructive',
-        title: 'Uh oh! Something went wrong.',
-        description: 'The AI forecast could not be generated. Please try again later.',
+        title: 'Ôi! Đã có lỗi xảy ra.',
+        description: 'Không thể tạo dự báo AI. Vui lòng thử lại sau.',
       });
     } finally {
       setLoading(false);
@@ -70,30 +70,30 @@ export default function CashFlowForecast({ totalIncome, expenses }: CashFlowFore
       <DialogTrigger asChild>
         <Button variant="outline" size="lg" className="w-full text-accent-foreground bg-accent hover:bg-accent/90 border-accent-foreground/20 text-base">
           <BrainCircuit className="mr-2 h-5 w-5" />
-          Get AI Cash Flow Forecast
+          Nhận dự báo dòng tiền bằng AI
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 font-headline"><Bot /> AI Cash Flow Forecast</DialogTitle>
+          <DialogTitle className="flex items-center gap-2 font-headline"><Bot /> Dự báo dòng tiền bằng AI</DialogTitle>
           <DialogDescription>
-            Analyze your finances and project future cash flow trends. Select a forecast horizon and run the analysis.
+            Phân tích tài chính của bạn và dự báo xu hướng dòng tiền trong tương lai. Chọn một khoảng thời gian dự báo và chạy phân tích.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4 space-y-4">
           <Select value={horizon} onValueChange={setHorizon}>
             <SelectTrigger>
-              <SelectValue placeholder="Select forecast horizon" />
+              <SelectValue placeholder="Chọn khoảng thời gian dự báo" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="3 months">3 Months</SelectItem>
-              <SelectItem value="6 months">6 Months</SelectItem>
-              <SelectItem value="1 year">1 Year</SelectItem>
+              <SelectItem value="3 months">3 tháng</SelectItem>
+              <SelectItem value="6 months">6 tháng</SelectItem>
+              <SelectItem value="1 year">1 năm</SelectItem>
             </SelectContent>
           </Select>
 
           <Button onClick={handleForecast} disabled={loading} className="w-full">
-            {loading ? 'Analyzing...' : 'Run Forecast'}
+            {loading ? 'Đang phân tích...' : 'Chạy dự báo'}
           </Button>
         </div>
 
@@ -108,7 +108,7 @@ export default function CashFlowForecast({ totalIncome, expenses }: CashFlowFore
           <div className="space-y-4 animate-in fade-in-50">
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2"><LineChart /> Forecast Summary</CardTitle>
+                <CardTitle className="text-lg flex items-center gap-2"><LineChart /> Tóm tắt dự báo</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">{result.forecastSummary}</p>
@@ -116,7 +116,7 @@ export default function CashFlowForecast({ totalIncome, expenses }: CashFlowFore
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Projected Cash Flow</CardTitle>
+                <CardTitle className="text-lg">Dòng tiền dự kiến</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm font-mono bg-muted p-3 rounded-md whitespace-pre-wrap">{result.projectedCashFlow}</p>
@@ -125,7 +125,7 @@ export default function CashFlowForecast({ totalIncome, expenses }: CashFlowFore
           </div>
         )}
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>Close</Button>
+          <Button variant="outline" onClick={() => setOpen(false)}>Đóng</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

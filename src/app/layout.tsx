@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Monopoly Manager',
-  description: 'A helper app for the Monopoly board game to manage your cash flow.',
+  title: 'Quản lý Cờ Tỷ Phú',
+  description: 'Ứng dụng trợ giúp cho trò chơi Cờ Tỷ Phú để quản lý dòng tiền của bạn.',
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="vi" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
